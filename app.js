@@ -65,7 +65,7 @@ app.post('/user-message', async (req, res) => {
 
         else {
             await Envs.update({env: environment}, {user: null})
-            respMessage = `Gracias por avisar! ${environment} ahora está disponible para otra persona!`
+            respMessage = `Gracias por avisar! ${environment} ahora está disponible!`
         }
     }
 
@@ -88,32 +88,30 @@ app.post('/user-message', async (req, res) => {
 
         else {
             await Envs.update({env: environment}, {user: userName})
-            respMessage = `${environment} está disponible! úsalo, pero avísame cuando ya no lo necesites con /env free ${environment}`
+            respMessage = `${environment} está disponible! úsalo, pero avísame cuando ya no lo necesites`
         }
     }
 
     else {
-        const envsList = await getDBEnvValues()
-        const envsListStr = envsList.map(envData => `<li><b>${envData.env}</b>: ${envData.user ? envData.user : '<i>Disponible</i>'}</li>`).join('')
+        const envsList = _.sortBy(await getDBEnvValues(), 'env')
+        let maxEnvStrLength = _.max(envsList.map((item) => item.env.length)) + 2
+        const envsListStr = envsList.map(envData => `&nbsp;&nbsp;&nbsp<b>${_.padEnd(envData.env, maxEnvStrLength, '.')}</b> ${envData.user ? envData.user : '<i>Disponible</i>'}<br/>`).join('')
 
         respMessage = `Lista actual de entornos:
         <br/>
-        <ul>
-            ${envsListStr}
-        </ul>
-        <pre>/env            // Muestra esta información
+        <pre>${envsListStr}
+/env            // Muestra esta información
 /env add ENV    // Agrega un entorno
 /env remove ENV // Elimina un entorno
 /env use ENV    // Para usar un entorno
-/env free ENV   // Para liberar un entorno</pre><br/>`
+/env free ENV   // Para liberar un entorno</pre>`
     }
 
-    const url = 'https://optivamedia.hipchat.com/v2/room/4624043/notification?auth_token=Y8Xt4ilMEtTo7x7DlqvAUualOmNPsi414kAAZhOg'
+    const url = process.env.HIPCHAT_ROOM_URL
     request.post(url, {
         form: {
             color: "green",
-            message: respMessage,
-            notify: true
+            message: respMessage
         }
     })
 });
