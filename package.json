@@ -13,14 +13,14 @@
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/calbertts/envs-bot.git"
+    "url": "git+https://github.com/danigarmo/envs-bot.git"
   },
   "author": "",
   "license": "MIT",
   "bugs": {
-    "url": "https://github.com/calbertts/envs-bot/issues"
+    "url": "https://github.com/danigarmo/envs-bot/issues"
   },
-  "homepage": "https://github.com/calbertts/envs-bot#readme",
+  "homepage": "https://github.com/danigarmo/envs-bot#readme",
   "dependencies": {
     "aws-sdk": "^2.250.1",
     "aws-serverless-express": "^3.2.0",

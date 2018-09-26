@@ -12,7 +12,7 @@ app.use(bodyParser.json());
 AWS.config.update({region: 'eu-west-1'});
 const Envs = dynamoose.model('envs_bot', { env: String, project: String, user: String })
 
-const isAdmin = (from) => from.mention_name === 'CarlosAlbertoCastaño' || from.mention_name === 'GeronimoDiPierro'
+const isAdmin = (from) => from.mention_name === 'DanielGarcia' || from.mention_name === 'CarlosJuegaReimundez' || from.mention_name === 'KiraPetit'
 const getUserName = (from) => from.name
 const getAction = (message = '') => _.get(message.split(' '), '[1]', '').trim()
 const getEnvironment = (message = '') => _.get(message.split(' '), '[2]', '').trim()
@@ -30,7 +30,7 @@ app.post('/user-message', async (req, res) => {
 
     if (action === 'add') {
         const environmentName = getEnvironment(message).toUpperCase()
-        const environmentObj = new Envs({env: environmentName, project: 'MFO', user: null});
+        const environmentObj = new Envs({env: environmentName, project: 'MFV', user: null});
 
         await environmentObj.save()
 
@@ -39,7 +39,7 @@ app.post('/user-message', async (req, res) => {
 
     else if (action === 'remove' && isAdmin(from)) {
         const environmentName = getEnvironment(message).toUpperCase()
-        const environmentObj = new Envs({env: environmentName, project: 'MFO', user: null});
+        const environmentObj = new Envs({env: environmentName, project: 'MFV', user: null});
 
         await environmentObj.delete({env: environmentName})
 
